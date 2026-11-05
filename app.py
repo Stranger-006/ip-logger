@@ -36,8 +36,7 @@ def home():
     </html>
     """
 
-print("Reached end of application")
+
 
 if __name__=="__main__":
-    print("Starting flask server")
-    app.run(host="127.0.0.1",port=5000, debug=False)
+    app.run(debug=False)    
