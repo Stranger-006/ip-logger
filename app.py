@@ -3,6 +3,17 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import datetime, timezone
 import logging
 import secrets
+from pymongo import MongoClient
+uri = "mongodb://ip_logger_admin:<db_password>@ac-xcyz9fg-shard-00-00.0hpjcza.mongodb.net:27017,ac-xcyz9fg-shard-00-01.0hpjcza.mongodb.net:27017,ac-xcyz9fg-shard-00-02.0hpjcza.mongodb.net:27017/?ssl=true&replicaSet=atlas-cm7v3y-shard-0&authSource=admin"
+client = MongoClient(uri)
+try:
+    client.admin.command("ping")
+    print("Connected successfully")
+    client.close()
+
+except Exception as e:
+    raise Exception(
+        "The following error occurred: ", e)
 
 app=Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1)
