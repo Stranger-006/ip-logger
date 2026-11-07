@@ -22,7 +22,7 @@ DEMO_RANGES=["192.0.2", "198.51.100", "203.0.113"]
 def generate_demo_ip():
     prefix=secrets.choice(DEMO_RANGES)
     last_octet=secrets.randbelow(254) + 1
-    return prefix + str(last_octet)
+    return prefix + "." + str(last_octet)
 
 @app.route("/")
 def home():
