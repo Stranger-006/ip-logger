@@ -14,7 +14,7 @@ handler=logging.StreamHandler()
 handler.setFormatter(logging.Formatter("%(asctime)s - %(message)s"))
 
 if not visitor_logger.handlers:
-    visitor_logger.addhandler(handler)
+    visitor_logger.addHandler(handler)
 visitor_logger.propagate= False
 
 DEMO_RANGES=["192.0.2", "198.51.100", "203.0.113"]
