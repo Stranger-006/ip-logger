@@ -3,9 +3,19 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import datetime, timezone
 import logging
 import secrets
+from firewall import check_request
 
 
 app=Flask(__name__)
+@app.before_request
+def firewall_guard():
+    ip=request.remote_addr or "unknown"
+
+    allowed,reason=check_request(ip)
+
+    if not allowed:
+        return reason,429
+
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1)
 
 visitor_logger=logging.getLogger("visitor_logger")

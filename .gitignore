@@ -4,3 +4,6 @@ __pycache__/
 venv/
 visitors.log
 .vs/
+.env
+.env.*
+!.env.example
