@@ -9,6 +9,10 @@ from firewall import check_request
 app=Flask(__name__)
 @app.before_request
 def firewall_guard():
+    if request.path == "/favicon.ico":
+        return "",204
+    if request.method in("HEAD","OPTIONS"):
+        return None
     ip=request.remote_addr or "unknown"
 
     allowed,reason=check_request(ip)
@@ -41,8 +45,7 @@ def home():
 
     timestamp=datetime.now(timezone.utc).isoformat()
 
-    visitor_logger.info("LIVE VISITOR | IP:%S|Time:%s|XFF:%s", ip, timestamp, request.headers.get("X-Forwarded-For",
-                                                                                                  "Not supplied"))
+    visitor_logger.info(f"LIVE VISITOR | IP:{ip}|Time:{timestamp}|" f"XFF:{request.headers.get('X-Forwarded-For','Not supplied')}")
 
     print(f"Logged visitor IP: {ip} at {timestamp}",flush=True)
 
@@ -72,8 +75,7 @@ def demo():
     try:
         demo_ip=generate_demo_ip()
         timestamp=datetime.now(timezone.utc).isoformat()
-        visitor_logger.info("DEMO VISITOR | IP:%s|Time:%s|XFF:%s", demo_ip, timestamp, request.headers.get("X-Forwarded-For",
-                                                                                                     "Not supplied"))
+        visitor_logger.info(f"DEMO VISITOR | IP:{demo_ip}|Time:{timestamp}|" f"XFF:{request.headers.get('X-Forwarded-For','Not supplied')}")
         print(f"Logged demo visitor IP: {demo_ip} at {timestamp}",flush=True)
         return f"""
         <!DOCTYPE html>
