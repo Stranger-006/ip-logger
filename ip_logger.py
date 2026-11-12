@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template_string
+from database import visitors
 from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import datetime, timezone
 import logging
@@ -254,6 +255,16 @@ def home():
     ip=request.remote_addr or "unknown"
 
     timestamp=datetime.now(timezone.utc).isoformat()
+    try:
+        visitors.insert_one({
+            "ip": ip,
+            "timestamp": datetime.now(timezone.utc),
+            "user_agent": request.headers.get("User-Agent", "unknown"),
+            "path": request.path
+        })
+
+    except Exception:
+        app.logger.exception("Failed to log visitor IP")
 
     visitor_logger.info(f"LIVE VISITOR | IP:{ip}|Time:{timestamp}|" f"XFF:{request.headers.get('X-Forwarded-For','Not supplied')}")
 
