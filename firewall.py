@@ -8,7 +8,7 @@ from database import (
 )
 
 
-REQUEST_LIMIT = 2      
+REQUEST_LIMIT = 60      
 WINDOW_SECONDS = 60      
 AUTO_BLOCK_MINUTES = 10  
 
